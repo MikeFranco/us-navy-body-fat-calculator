@@ -29,21 +29,22 @@ const stops = [
 ];
 const Range = ({ percentage }: { percentage: number }) => {
   return (
-    <div className='flex-col mt-16'>
+    <div className='flex-col'>
+      <h1 className='text-3xl font-bold mb-20'>Tu resultado es: {percentage}%</h1>
       <div className='flex items-center gap-2.5'>
         {/* <div className='percentage-value'>{percentage}%</div>
         <div className='arrow' style={{ left: `${percentage}%` }}></div> */}
         <input
           type='range'
           min='0'
-          max='100'
+          max='30'
           value={percentage}
           readOnly
           className='range-slider'
           style={{ background: getGradient() }}
         />
       </div>
-      <div className='flex justify-evenly'>
+      <div className='flex justify-evenly mt-5'>
         {stops.map((stop) => {
           return (
             <div className='flex-col text-center items-center'>
