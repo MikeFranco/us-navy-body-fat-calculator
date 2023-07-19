@@ -68,11 +68,11 @@ const Range = ({ percentage, gender }: { percentage: number; gender: string }) =
     if (percentage >= 28) {
       return 'calc(100% - 15px)';
     } else if (percentage <= 10) {
-      return `${metric}% + 45px`;
+      return `calc(${metric}% + 45px)`;
     } else if (percentage > 10 && percentage <= 16) {
-      `${metric}% + 55px`;
+      return `calc(${metric}% + 40px)`;
     } else {
-      return `${metric}% + 2px`;
+      return `calc(${metric}% + 2px)`;
     }
   };
 
@@ -81,9 +81,9 @@ const Range = ({ percentage, gender }: { percentage: number; gender: string }) =
     if (percentage >= 28) {
       return 'calc(100% - 40px)';
     } else if (percentage <= 16) {
-      return `${metric}% + 250px`;
+      return `calc(${metric}% + 20px)`;
     } else {
-      return `${metric}%`;
+      return `calc(${metric}%)`;
     }
   };
 

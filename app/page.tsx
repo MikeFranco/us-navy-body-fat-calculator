@@ -1,32 +1,31 @@
 'use client';
 import { useState } from 'react';
-import { BodyFatIndexForm } from './components/Form';
+import type { FormEvent } from 'react';
+import { BodyFatIndexForm, FORM_NAMES } from './components/Form';
 import Range from './components/Range';
-
-interface IRequestBodyMass {
-  preventDefault: () => void;
-  target: {
-    gender: { value: string };
-    height: { value: string };
-    weight: { value: string };
-    waist: { value: string };
-    neck: { value: string };
-    hip: { value: string };
-  };
-}
 
 const HomePage = () => {
   const [percentage, setPercentage] = useState<number>(0);
   const [gender, setGender] = useState<string>('male');
-  const requestBodyMass = async (e: IRequestBodyMass) => {
+  const requestBodyMass = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+
+    const gender = String(formData.get(FORM_NAMES.gender));
+    const height = Number(formData.get(FORM_NAMES.height));
+    const weight = Number(formData.get(FORM_NAMES.weight));
+    const waist = Number(formData.get(FORM_NAMES.waist));
+    const neck = Number(formData.get(FORM_NAMES.neck));
+    const hip = formData.get(FORM_NAMES.hip);
+
     const data = {
-      gender: e.target.gender.value,
-      height: +e.target.height.value,
-      weight: +e.target.weight.value,
-      waist: +e.target.waist.value,
-      neck: +e.target.neck.value,
-      hip: e.target.hip?.value,
+      gender,
+      height,
+      weight,
+      waist,
+      neck,
+      hip: hip ? Number(hip) : 0,
     };
 
     const queryParams = Object.entries(data)
