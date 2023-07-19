@@ -17,10 +17,9 @@ interface IRequestBodyMass {
 
 const HomePage = () => {
   const [showRange, setShowRange] = useState(false);
-  const [percentage, setPercentage] = useState(28.1);
-  const requestBodyMass = (e: IRequestBodyMass) => {
+  const [percentage, setPercentage] = useState(0);
+  const requestBodyMass = async (e: IRequestBodyMass) => {
     e.preventDefault();
-    console.log(e);
     const data = {
       gender: e.target.gender.value,
       height: +e.target.height.value,
@@ -30,8 +29,16 @@ const HomePage = () => {
       hip: e.target.hip?.value,
     };
 
-    if (data.gender !== 'female') delete data.hip;
-    setShowRange(true);
+    const queryParams = Object.entries(data)
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+      .join('&');
+
+    const response = await fetch(`http://localhost:3001/body-mass/calculator?${queryParams}`);
+    const responseData = await response.json();
+    if (responseData.percentage) {
+      setPercentage(responseData.percentage.toFixed(1));
+      setShowRange(true);
+    }
   };
   return (
     <div className='flex mt-16 h-full m-auto min-h-full w-11/12 justify-center'>
