@@ -1,20 +1,26 @@
 'use client';
 import React, { useState } from 'react';
 import Button from './Button';
+interface IGenderInput {
+  gender: string;
+  setGender: (value: string) => void;
+  resetRange: () => void;
+}
+
 interface IFormInput {
   label: string;
   id: string;
   value: number;
   onChange: (value: number) => void;
+  resetRange: () => void;
 }
 
-const GenderInput = ({
-  gender,
-  setGender,
-}: {
-  gender: string;
-  setGender: (value: string) => void;
-}) => {
+interface IBodyFatIndexForm {
+  requestBodyMass: (e: any) => void;
+  resetRange: () => void;
+}
+
+const GenderInput = ({ gender, setGender, resetRange }: IGenderInput) => {
   return (
     <div className='mb-4'>
       <p className='mb-2 font-bold'>Género</p>
@@ -24,7 +30,10 @@ const GenderInput = ({
             type='radio'
             name='gender'
             value='male'
-            onChange={(e) => setGender(e.target.value)}
+            onChange={(e) => {
+              setGender(e.target.value);
+              resetRange();
+            }}
             checked={gender === 'male'}
             className='mr-3'
           />
@@ -35,7 +44,10 @@ const GenderInput = ({
             type='radio'
             name='gender'
             value='female'
-            onChange={(e) => setGender(e.target.value)}
+            onChange={(e) => {
+              setGender(e.target.value);
+              resetRange();
+            }}
             checked={gender === 'female'}
             className='mr-3'
           />
@@ -46,7 +58,7 @@ const GenderInput = ({
   );
 };
 
-const FormInput = ({ label, id, value, onChange }: IFormInput) => {
+const FormInput = ({ label, id, value, onChange, resetRange }: IFormInput) => {
   return (
     <div className='mb-1'>
       <label htmlFor={id}>{label}</label>
@@ -55,19 +67,22 @@ const FormInput = ({ label, id, value, onChange }: IFormInput) => {
         type='number'
         id={id}
         value={value}
-        onChange={(e) => onChange(+e.target.value)}
+        onChange={(e) => {
+          onChange(+e.target.value);
+          resetRange();
+        }}
       />
     </div>
   );
 };
 
-export const BodyFatIndexForm = ({ requestBodyMass }: { requestBodyMass: (e: any) => void }) => {
+export const BodyFatIndexForm = ({ requestBodyMass, resetRange }: IBodyFatIndexForm) => {
   const [gender, setGender] = useState('male');
-  const [height, setHeight] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [waist, setWaist] = useState(0);
-  const [neck, setNeck] = useState(0);
-  const [hip, setHip] = useState(0);
+  const [height, setHeight] = useState(178);
+  const [weight, setWeight] = useState(70);
+  const [waist, setWaist] = useState(96);
+  const [neck, setNeck] = useState(50);
+  const [hip, setHip] = useState(93);
 
   const cleanForm = () => {
     setGender('male');
@@ -87,13 +102,43 @@ export const BodyFatIndexForm = ({ requestBodyMass }: { requestBodyMass: (e: any
       </p>
       <p className='mb-7'>Los valores requeridos por la fórmula son los siguientes:</p>
       <form onSubmit={requestBodyMass}>
-        <GenderInput gender={gender} setGender={setGender} />
-        <FormInput label='Altura (cm)' id='height' value={height} onChange={setHeight} />
-        <FormInput label='Peso (kg)' id='weight' value={weight} onChange={setWeight} />
-        <FormInput label='Cintura (cm)' id='waist' value={waist} onChange={setWaist} />
-        <FormInput label='Cuello (cm)' id='neck' value={neck} onChange={setNeck} />
+        <GenderInput gender={gender} setGender={setGender} resetRange={resetRange} />
+        <FormInput
+          label='Altura (cm)'
+          id='height'
+          value={height}
+          onChange={setHeight}
+          resetRange={resetRange}
+        />
+        <FormInput
+          label='Peso (kg)'
+          id='weight'
+          value={weight}
+          onChange={setWeight}
+          resetRange={resetRange}
+        />
+        <FormInput
+          label='Cintura (cm)'
+          id='waist'
+          value={waist}
+          onChange={setWaist}
+          resetRange={resetRange}
+        />
+        <FormInput
+          label='Cuello (cm)'
+          id='neck'
+          value={neck}
+          onChange={setNeck}
+          resetRange={resetRange}
+        />
         {gender === 'female' && (
-          <FormInput label='Cadera (cm)' id='hip' value={hip} onChange={setHip} />
+          <FormInput
+            label='Cadera (cm)'
+            id='hip'
+            value={hip}
+            onChange={setHip}
+            resetRange={resetRange}
+          />
         )}
         <Button type='submit' color='bg-light-purple' title='Calcular' />
         <Button type='reset' color='bg-black' title='Limpiar' onClick={() => cleanForm()} />

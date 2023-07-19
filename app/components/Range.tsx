@@ -1,6 +1,6 @@
 import React from 'react';
 import './Range.css';
-const stops = [
+const stopsMale = [
   {
     color: '#029EEA',
     name: 'Esencial',
@@ -27,10 +27,40 @@ const stops = [
     range: '25% +',
   },
 ];
-const Range = ({ percentage }: { percentage: number }) => {
+const stopsFemale = [
+  {
+    color: '#029EEA',
+    name: 'Esencial',
+    range: '10-13%',
+  },
+  {
+    color: '#2BEA02',
+    name: 'Deportista',
+    range: '14-20%',
+  },
+  {
+    color: '#EAE502',
+    name: 'Fitness',
+    range: '21-24%',
+  },
+  {
+    color: '#EA8A02',
+    name: 'Aceptable',
+    range: '25-31%',
+  },
+  {
+    color: '#EA5702',
+    name: 'Obeso',
+    range: '32% +',
+  },
+];
+const Range = ({ percentage, gender }: { percentage: number; gender: string }) => {
+  const stops = gender === 'female' ? stopsFemale : stopsMale;
+
   const convertToMetric = (number: number) => {
     const clampedNumber = Math.min(Math.max(number, 0), 30);
     const metric = (clampedNumber / 30) * 100;
+    console.log('%c⧭ metric', 'color: #e57373', metric);
     return metric;
   };
 
@@ -85,7 +115,7 @@ const Range = ({ percentage }: { percentage: number }) => {
               value={percentage}
               readOnly
               className='range-slider'
-              style={{ background: getGradient() }}
+              style={{ background: getGradient(stops) }}
             />
           </div>
           <div className='flex justify-evenly mt-5'>
@@ -108,7 +138,7 @@ const Range = ({ percentage }: { percentage: number }) => {
   );
 };
 
-const getGradient = () => {
+const getGradient = (stops: { color: string; name: string; range: string }[]) => {
   const colorStops = stops.map((stop) => `${stop.color}`);
 
   return `linear-gradient(to right, ${colorStops.join(', ')})`;

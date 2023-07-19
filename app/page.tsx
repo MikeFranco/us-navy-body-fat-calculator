@@ -11,13 +11,13 @@ interface IRequestBodyMass {
     weight: { value: string };
     waist: { value: string };
     neck: { value: string };
-    hip: { value?: string };
+    hip: { value: string };
   };
 }
 
 const HomePage = () => {
-  const [showRange, setShowRange] = useState(false);
-  const [percentage, setPercentage] = useState(0);
+  const [percentage, setPercentage] = useState<number>(0);
+  const [gender, setGender] = useState<string>('male');
   const requestBodyMass = async (e: IRequestBodyMass) => {
     e.preventDefault();
     const data = {
@@ -37,16 +37,23 @@ const HomePage = () => {
     const responseData = await response.json();
     if (responseData.percentage) {
       setPercentage(responseData.percentage.toFixed(1));
-      setShowRange(true);
     }
+    if (responseData.gender) {
+      setGender(responseData.gender);
+    }
+  };
+
+  const resetRange = () => {
+    setPercentage(0);
+    setGender('');
   };
   return (
     <div className='flex mt-16 h-full m-auto min-h-full w-11/12 justify-center'>
       <div className='flex-1 px-20'>
-        <BodyFatIndexForm requestBodyMass={requestBodyMass} />
+        <BodyFatIndexForm requestBodyMass={requestBodyMass} resetRange={resetRange} />
       </div>
       <div className='flex-1 px-20 mt-auto mb-auto'>
-        {showRange && <Range percentage={percentage} />}
+        {!!percentage && !!gender && <Range percentage={percentage} gender={gender} />}
       </div>
     </div>
   );
