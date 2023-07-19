@@ -60,7 +60,6 @@ const Range = ({ percentage, gender }: { percentage: number; gender: string }) =
   const convertToMetric = (number: number) => {
     const clampedNumber = Math.min(Math.max(number, 0), 30);
     const metric = (clampedNumber / 30) * 100;
-    console.log('%c⧭ metric', 'color: #e57373', metric);
     return metric;
   };
 
@@ -81,7 +80,7 @@ const Range = ({ percentage, gender }: { percentage: number; gender: string }) =
     const metric = convertToMetric(percentage);
     if (percentage >= 28) {
       return 'calc(100% - 40px)';
-    } else if (percentage <= 10 || (percentage > 10 && percentage <= 16)) {
+    } else if (percentage <= 16) {
       return `${metric}% + 250px`;
     } else {
       return `${metric}%`;
