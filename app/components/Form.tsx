@@ -76,6 +76,7 @@ const FormInput = ({ label, id, name, defaultValue = 0 }: FormInputProps) => {
         id={id}
         name={name}
         defaultValue={defaultValue}
+        min="1"
       />
     </div>
   );

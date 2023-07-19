@@ -28,6 +28,18 @@ const HomePage = () => {
       hip: hip ? Number(hip) : 0,
     };
 
+    const isInvalidField = (value: number) => value <= 0;
+
+    if (
+      isInvalidField(height) ||
+      isInvalidField(weight) ||
+      isInvalidField(waist) ||
+      isInvalidField(neck) ||
+      (gender === 'female' && isInvalidField(Number(hip)))
+    ) {
+      return;
+    }
+
     const queryParams = Object.entries(data)
       .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
       .join('&');
