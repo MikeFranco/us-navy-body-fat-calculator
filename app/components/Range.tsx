@@ -28,16 +28,50 @@ const stops = [
   },
 ];
 const Range = ({ percentage }: { percentage: number }) => {
+  const convertToMetric = (number: number) => {
+    const clampedNumber = Math.min(Math.max(number, 0), 30);
+    const metric = (clampedNumber / 30) * 100;
+    return metric;
+  };
+
   return (
     <div className='flex-col'>
       <h1 className='text-3xl font-bold mb-20'>Tu resultado es: {percentage}%</h1>
-      <div className='flex items-center gap-2.5'>
-        {/* <div className='percentage-value'>{percentage}%</div>
-        <div className='arrow' style={{ left: `${percentage}%` }}></div> */}
+      <div className='flex items-center'>
+        <div
+          className='percentage-value relative top-[-6rem]'
+          style={{
+            left: `calc(${
+              percentage >= 28
+                ? '100% - 15px'
+                : percentage <= 10
+                ? `${convertToMetric(percentage)}% + 45px`
+                : percentage > 10 && percentage <= 16
+                ? `${convertToMetric(percentage)}% + 55px`
+                : `${convertToMetric(percentage)}% + 25px`
+            })`,
+          }}
+        >
+          {percentage}%
+        </div>
+        <div
+          className='arrow'
+          style={{
+            left: `calc(${
+              percentage >= 28
+                ? '100% - 40px'
+                : percentage <= 10
+                ? `${convertToMetric(percentage)}% + 25px`
+                : percentage > 10 && percentage <= 16
+                ? `${convertToMetric(percentage)}% + 25px`
+                : `${convertToMetric(percentage)}%`
+            })`,
+          }}
+        ></div>
         <input
           type='range'
           min='0'
-          max='30'
+          max='28'
           value={percentage}
           readOnly
           className='range-slider'
@@ -45,9 +79,9 @@ const Range = ({ percentage }: { percentage: number }) => {
         />
       </div>
       <div className='flex justify-evenly mt-5'>
-        {stops.map((stop) => {
+        {stops.map((stop, index) => {
           return (
-            <div className='flex-col text-center items-center'>
+            <div className='flex-col text-center items-center' key={index}>
               <div
                 className='ml-auto mr-auto w-4 h-4 rounded mb-2'
                 style={{ backgroundColor: `${stop.color}` }}
@@ -63,10 +97,7 @@ const Range = ({ percentage }: { percentage: number }) => {
 };
 
 const getGradient = () => {
-  const colorStops = stops.map((stop, index) => {
-    const start = (index * 100) / (stops.length - 1);
-    return `${stop.color} ${start}%`;
-  });
+  const colorStops = stops.map((stop) => `${stop.color}`);
 
   return `linear-gradient(to right, ${colorStops.join(', ')})`;
 };
